@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}LabBook{% endblock %} · LabBook</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body class="role-{{ me.role if me else 'student' }}">
+{% if me %}
+{% set ep = request.endpoint %}
+<div class="shell">
+<nav class="side" aria-label="Điều hướng chính">
+  <div class="brand">LabBook</div>
+  <div class="who"><b>{{ me.full_name }}</b>{{ ROLE_LABEL[me.role] }}</div>
+  <a class="nav {{ 'on' if ep=='dashboard' }}" href="{{ url_for('dashboard') }}">Tổng quan</a>
+  {% if me.role == 'admin' %}
+    <a class="nav {{ 'on' if ep=='admin_bookings' }}" href="{{ url_for('admin_bookings') }}">Duyệt yêu cầu</a>
+    <a class="nav {{ 'on' if ep=='schedule' }}" href="{{ url_for('schedule') }}">Lịch tuần</a>
+    <a class="nav {{ 'on' if ep=='admin_loans' }}" href="{{ url_for('admin_loans') }}">Mượn – trả</a>
+    <a class="nav {{ 'on' if ep in ('damage_list','damage_new') }}" href="{{ url_for('damage_list') }}">Báo hỏng</a>
+    <a class="nav {{ 'on' if ep=='admin_stats' }}" href="{{ url_for('admin_stats') }}">Thống kê</a>
+    <a class="nav {{ 'on' if ep=='admin_rooms' }}" href="{{ url_for('admin_rooms') }}">Phòng lab</a>
+    <a class="nav {{ 'on' if ep=='admin_equipment' }}" href="{{ url_for('admin_equipment') }}">Thiết bị</a>
+    <a class="nav {{ 'on' if ep=='admin_users' }}" href="{{ url_for('admin_users') }}">Tài khoản</a>
+  {% else %}
+    <a class="nav {{ 'on' if ep=='schedule' }}" href="{{ url_for('schedule') }}">Lịch tuần</a>
+    <a class="nav {{ 'on' if ep=='booking_new' }}" href="{{ url_for('booking_new') }}">Đặt phòng / thiết bị</a>
+    <a class="nav {{ 'on' if ep=='my_bookings' }}" href="{{ url_for('my_bookings') }}">Yêu cầu của tôi</a>
+    <a class="nav {{ 'on' if ep in ('damage_list','damage_new') }}" href="{{ url_for('damage_list') }}">Báo hỏng</a>
+  {% endif %}
+  <div class="grow"></div>
+  <a class="nav {{ 'on' if ep=='profile' }}" href="{{ url_for('profile') }}">Hồ sơ</a>
+  <form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="link">Đăng xuất</button></form>
+</nav>
+<main class="main">{% include '_flash.html' %}{% block content %}{% endblock %}</main>
+</div>
+{% else %}{% block auth %}{% endblock %}{% endif %}
+</body></html>

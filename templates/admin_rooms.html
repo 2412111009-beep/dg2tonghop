@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block title %}Phòng lab{% endblock %}
+{% block content %}
+<h1>Phòng lab</h1><p class="sub">Thêm phòng mới hoặc tạm ngưng phòng đang bảo trì.</p>
+<form method="post" class="card"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="op" value="add">
+<div class="row"><div><label>Tên phòng</label><input name="name" required></div><div><label>Vị trí</label><input name="location"></div><div><label>Sức chứa</label><input name="capacity" type="number" min="0"></div></div>
+<p><button class="btn">Thêm phòng</button></p></form>
+<div class="card tw"><table><tr><th>Phòng</th><th>Vị trí</th><th>Sức chứa</th><th>Trạng thái</th><th></th></tr>
+{% for r in rows %}<tr><td>{{ r.name }}</td><td>{{ r.location }}</td><td>{{ r.capacity }}</td><td>{{ 'Hoạt động' if r.is_active else 'Tạm ngưng' }}</td>
+<td><form method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="op" value="toggle"><input type="hidden" name="id" value="{{ r.id }}"><button class="btn sm ghost">{{ 'Tạm ngưng' if r.is_active else 'Kích hoạt' }}</button></form></td></tr>{% endfor %}</table></div>
+{% endblock %}

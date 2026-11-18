@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block title %}Báo hỏng{% endblock %}
+{% block content %}
+<h1>Báo hỏng</h1><p class="sub">{{ 'Tất cả báo hỏng, chưa xử lý xếp trước.' if me.role=='admin' else 'Các báo hỏng bạn đã gửi.' }}</p>
+<p><a class="btn" href="{{ url_for('damage_new') }}">Báo hỏng mới</a></p>
+{% if rows %}<div class="card tw"><table><tr><th>Thời gian</th><th>Đối tượng</th><th>Người báo</th><th>Mô tả</th><th>Ảnh</th><th>Trạng thái</th>{% if me.role=='admin' %}<th></th>{% endif %}</tr>
+{% for d in rows %}<tr><td>{{ d.created_at[:16] }}</td><td>{{ d.ename or d.rname }}</td><td>{{ d.full_name }}</td><td>{{ d.description }}</td>
+<td>{% if d.photo %}<a href="{{ url_for('uploads', name=d.photo) }}" target="_blank"><img class="photo" style="max-width:90px" src="{{ url_for('uploads', name=d.photo) }}" alt="Ảnh báo hỏng"></a>{% endif %}</td>
+<td><span class="badge {{ d.status }}">{{ 'Chưa xử lý' if d.status=='open' else 'Đã xử lý' }}</span></td>
+{% if me.role=='admin' %}<td>{% if d.status=='open' %}<form class="inline-form" method="post" action="{{ url_for('damage_resolve', did=d.id) }}"><input type="hidden" name="csrf" value="{{ csrf }}">{% if d.equipment_id %}<label style="margin:0;font-weight:400"><input type="checkbox" name="restock" style="width:auto"> đã sửa, dùng lại</label>{% endif %}<button class="btn sm">Xong</button></form>{% endif %}</td>{% endif %}</tr>{% endfor %}</table></div>
+{% else %}<div class="empty">Chưa có báo hỏng nào.</div>{% endif %}
+{% endblock %}

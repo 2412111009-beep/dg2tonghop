@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}Hồ sơ{% endblock %}
+{% block content %}
+<h1>Hồ sơ</h1><p class="sub">{{ me.email }} · {{ ROLE_LABEL[me.role] }}</p>
+<form method="post" class="card" style="max-width:560px"><input type="hidden" name="csrf" value="{{ csrf }}">
+<label>Họ và tên</label><input name="full_name" value="{{ me.full_name }}" required>
+<div class="row"><div><label>Điện thoại</label><input name="phone" value="{{ me.phone or '' }}"></div>
+<div><label>Nhóm đồ án</label><input name="group_name" value="{{ me.group_name or '' }}"></div></div>
+<h2 style="margin-top:1.5rem">Đổi mật khẩu</h2><p class="muted" style="margin:0">Để trống nếu không đổi.</p>
+<label>Mật khẩu hiện tại</label><input name="old_password" type="password" autocomplete="current-password">
+<label>Mật khẩu mới</label><input name="new_password" type="password" minlength="6" autocomplete="new-password">
+<p><button class="btn">Lưu hồ sơ</button></p></form>
+{% endblock %}

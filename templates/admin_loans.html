@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% from "_m.html" import span with context %}{% block title %}Mượn – trả{% endblock %}
+{% block content %}
+<h1>Mượn – trả thiết bị</h1><p class="sub">Giao thiết bị theo yêu cầu đã duyệt, ghi nhận tình trạng khi trả.</p>
+<div class="card"><h2>Chờ giao</h2>
+{% if to_issue %}<div class="tw"><table><tr><th>Yêu cầu</th><th>Người mượn</th><th>Thiết bị</th><th>Thời gian</th><th></th></tr>
+{% for r in to_issue %}<tr><td>#{{ r.bid }}</td><td>{{ r.full_name }}</td><td>{{ r.ename }} ×{{ r.remain }}</td><td>{{ span(r.start_time, r.end_time) }}</td>
+<td><form method="post" action="{{ url_for('loan_issue') }}"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="booking_id" value="{{ r.bid }}"><input type="hidden" name="equipment_id" value="{{ r.equipment_id }}"><button class="btn sm">Giao thiết bị</button></form></td></tr>{% endfor %}</table></div>
+{% else %}<div class="empty">Không có thiết bị nào chờ giao.</div>{% endif %}</div>
+<div class="card"><h2>Đang cho mượn</h2>
+{% if out %}<div class="tw"><table><tr><th>Thiết bị</th><th>Người mượn</th><th>Giao lúc</th><th>Trả và ghi nhận tình trạng</th></tr>
+{% for l in out %}<tr><td>{{ l.ename }} ×{{ l.quantity }}</td><td>{{ l.full_name }}</td><td>{{ l.borrowed_at[:16] }}</td>
+<td><form class="inline-form" method="post" action="{{ url_for('loan_return', lid=l.id) }}"><input type="hidden" name="csrf" value="{{ csrf }}">
+<select name="condition" aria-label="Tình trạng"><option value="good">Tốt</option><option value="damaged">Hỏng</option><option value="lost">Mất</option></select>
+<input name="note" placeholder="Ghi chú" aria-label="Ghi chú"><button class="btn sm">Nhận trả</button></form></td></tr>{% endfor %}</table></div>
+{% else %}<div class="empty">Không có thiết bị nào đang cho mượn.</div>{% endif %}</div>
+<div class="card"><h2>Đã trả gần đây</h2>
+{% if history %}<div class="tw"><table><tr><th>Thiết bị</th><th>Người mượn</th><th>Trả lúc</th><th>Tình trạng</th><th>Ghi chú</th></tr>
+{% for l in history %}<tr><td>{{ l.ename }} ×{{ l.quantity }}</td><td>{{ l.full_name }}</td><td>{{ l.returned_at[:16] }}</td><td><span class="badge {{ l.return_condition }}">{{ COND_LABEL[l.return_condition] }}</span></td><td>{{ l.return_note or '' }}</td></tr>{% endfor %}</table></div>
+{% else %}<div class="empty">Chưa có lượt trả nào.</div>{% endif %}</div>
+{% endblock %}

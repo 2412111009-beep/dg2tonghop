@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.db
+.secret_key
+uploads/
+.git
+.env
+README.md

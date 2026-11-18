@@ -1,0 +1,14 @@
+{% extends "_auth.html" %}{% block title %}Đăng ký{% endblock %}
+{% block form %}
+<h1>Tạo tài khoản</h1><p class="sub">Tài khoản giảng viên cần quản trị viên kích hoạt trước khi dùng.</p>
+<form method="post"><input type="hidden" name="csrf" value="{{ csrf }}">
+<label for="full_name">Họ và tên</label><input id="full_name" name="full_name" required>
+<label for="email">Email</label><input id="email" name="email" type="email" required>
+<div class="row"><div><label for="role">Vai trò</label><select id="role" name="role"><option value="student">Sinh viên</option><option value="lecturer">Giảng viên</option></select></div>
+<div><label for="phone">Điện thoại</label><input id="phone" name="phone"></div></div>
+<label for="group_name">Nhóm đồ án (nếu là sinh viên)</label><input id="group_name" name="group_name" placeholder="VD: Nhóm IoT-03">
+<div class="row"><div><label for="password">Mật khẩu</label><input id="password" name="password" type="password" minlength="6" required></div>
+<div><label for="password2">Nhập lại</label><input id="password2" name="password2" type="password" required></div></div>
+<p style="margin:1.25rem 0 .75rem"><button class="btn" style="width:100%">Đăng ký</button></p></form>
+<p><a href="{{ url_for('login') }}">Đã có tài khoản? Đăng nhập</a></p>
+{% endblock %}

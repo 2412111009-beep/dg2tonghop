@@ -1,0 +1,3 @@
+{% extends "base.html" %}{% block title %}Lỗi {{ code }}{% endblock %}
+{% block content %}<h1>{{ code }}</h1><p class="sub">{{ msg }}</p><a class="btn" href="{{ url_for('index') }}">Về trang chính</a>{% endblock %}
+{% block auth %}<div class="form" style="padding:3rem;max-width:520px;margin:auto"><h1>{{ code }}</h1><p class="sub">{{ msg }}</p><a class="btn" href="{{ url_for('index') }}">Về trang chính</a></div>{% endblock %}

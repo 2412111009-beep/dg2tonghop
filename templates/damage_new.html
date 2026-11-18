@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block title %}Báo hỏng{% endblock %}
+{% block content %}
+<h1>Báo hỏng</h1><p class="sub">Chọn thiết bị hoặc phòng, mô tả tình trạng và đính kèm ảnh nếu có.</p>
+<form method="post" enctype="multipart/form-data" class="card" style="max-width:640px"><input type="hidden" name="csrf" value="{{ csrf }}">
+<div class="row"><div><label for="equipment_id">Thiết bị</label><select id="equipment_id" name="equipment_id"><option value="">—</option>{% for e in equips %}<option value="{{ e.id }}">{{ e.name }}</option>{% endfor %}</select></div>
+<div><label for="room_id">Phòng</label><select id="room_id" name="room_id"><option value="">—</option>{% for r in rooms %}<option value="{{ r.id }}">{{ r.name }}</option>{% endfor %}</select></div></div>
+<label for="description">Mô tả tình trạng</label><textarea id="description" name="description" required></textarea>
+<label for="photo">Ảnh (PNG, JPG, tối đa 5 MB)</label><input id="photo" name="photo" type="file" accept="image/*">
+<p><button class="btn">Gửi báo hỏng</button></p></form>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}Thiết bị{% endblock %}
+{% block content %}
+<h1>Thiết bị</h1><p class="sub">Số lượng khả dụng = tổng số trừ số đang hỏng hoặc mất.</p>
+<form method="post" class="card"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="op" value="add">
+<div class="row"><div><label>Tên thiết bị</label><input name="name" required></div><div><label>Loại</label><input name="category"></div><div><label>Số lượng</label><input name="quantity" type="number" min="0" value="1" required></div></div>
+<p><button class="btn">Thêm thiết bị</button></p></form>
+<div class="card tw"><table><tr><th>Thiết bị</th><th>Loại</th><th>Tổng</th><th>Hỏng / mất</th><th>Khả dụng</th><th>Trạng thái</th><th></th></tr>
+{% for e in rows %}<tr><td>{{ e.name }}</td><td>{{ e.category }}</td>
+<td><form class="inline-form" method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="op" value="qty"><input type="hidden" name="id" value="{{ e.id }}"><input name="quantity" type="number" min="0" value="{{ e.quantity }}" style="width:5rem" aria-label="Tổng số lượng"><button class="btn sm ghost">Lưu</button></form></td>
+<td>{{ e.broken_qty }}</td><td>{{ e.quantity - e.broken_qty }}</td><td>{{ 'Hoạt động' if e.is_active else 'Tạm ngưng' }}</td>
+<td><form method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="op" value="toggle"><input type="hidden" name="id" value="{{ e.id }}"><button class="btn sm ghost">{{ 'Tạm ngưng' if e.is_active else 'Kích hoạt' }}</button></form></td></tr>{% endfor %}</table></div>
+{% endblock %}

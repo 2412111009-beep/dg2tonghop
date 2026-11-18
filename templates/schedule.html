@@ -1,0 +1,27 @@
+{% extends "base.html" %}{% block title %}Lịch tuần{% endblock %}
+{% block content %}
+<h1>Lịch tuần</h1><p class="sub">Tuần {{ days[0].strftime('%d/%m') }} – {{ days[6].strftime('%d/%m/%Y') }}{% if me.role != 'admin' %}. Bấm vào ô trống để đặt nhanh.{% endif %}</p>
+<div class="tabs">
+  <a class="{{ 'on' if kind=='room' }}" href="{{ url_for('schedule', kind='room', week=monday) }}">Phòng</a>
+  <a class="{{ 'on' if kind=='equip' }}" href="{{ url_for('schedule', kind='equip', week=monday) }}">Thiết bị</a>
+</div>
+<div class="tabs">{% for i in items %}<a class="{{ 'on' if obj and obj.id==i.id }}" href="{{ url_for('schedule', kind=kind, id=i.id, week=monday) }}">{{ i.name }}</a>{% endfor %}</div>
+{% if obj %}
+<div style="display:flex;gap:.5rem;margin-bottom:.75rem;flex-wrap:wrap">
+  <a class="btn ghost sm" href="{{ url_for('schedule', kind=kind, id=obj.id, week=prev) }}">← Tuần trước</a>
+  <a class="btn ghost sm" href="{{ url_for('schedule', kind=kind, id=obj.id) }}">Tuần này</a>
+  <a class="btn ghost sm" href="{{ url_for('schedule', kind=kind, id=obj.id, week=nxt) }}">Tuần sau →</a>
+</div>
+<div class="tw card" style="padding:0"><table class="week">
+<tr><th style="width:64px"></th>{% for d in days %}<th class="{{ 'today' if d==today }}">{{ WEEKDAYS[loop.index0] }}<small>{{ d.strftime('%d/%m') }}</small></th>{% endfor %}</tr>
+{% for h in hours %}<tr><td class="h">{{ '%02d'|format(h) }}:00</td>
+{% for d in days %}{% set cell = grid[(loop.index0, h)] %}<td>
+{% if cell %}{% for b in cell %}<div class="slot {{ b.status }} {{ 'lect' if b.role=='lecturer' }}" title="{{ b.start_time[11:16] }}–{{ b.end_time[11:16] }}">
+{% if me.role=='admin' or b.user_id==me.id %}{{ b.full_name }}{% else %}{{ 'Giảng viên' if b.role=='lecturer' else 'Sinh viên' }}{% endif %}
+{% if b.qty %}×{{ b.qty }}{% endif %}<br>{{ 'Chờ duyệt' if b.status=='pending' else 'Đã duyệt' }}</div>{% endfor %}
+{% elif me.role!='admin' and (d.strftime('%Y-%m-%d') + ' %02d:00'|format(h)) > now_str %}
+<a class="slot free" href="{{ url_for('booking_new', date=d.strftime('%Y-%m-%d'), start='%02d:00'|format(h), end='%02d:00'|format(h+1), room_id=obj.id if kind=='room' else '', eq=obj.id if kind=='equip' else '') }}">+</a>
+{% endif %}</td>{% endfor %}</tr>{% endfor %}</table></div>
+<div class="legend"><span><i style="background:var(--accent)"></i>Đã duyệt</span><span><i style="background:var(--pending-bg);border:1px solid var(--pending)"></i>Chờ duyệt</span><span><i style="background:#8E8CE8"></i>Thanh tím bên trái: giảng viên</span></div>
+{% else %}<div class="empty">Chưa có {{ 'phòng' if kind=='room' else 'thiết bị' }} nào để hiển thị.</div>{% endif %}
+{% endblock %}

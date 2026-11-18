@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block title %}Đặt phòng / thiết bị{% endblock %}
+{% block content %}
+<h1>Đặt phòng / thiết bị</h1>
+<p class="sub">{% if me.role=='lecturer' %}Là giảng viên, yêu cầu của bạn có thể thay thế yêu cầu chưa duyệt của sinh viên khi trùng giờ.{% else %}Hệ thống tự chặn nếu phòng hoặc thiết bị đã kín trong khung giờ này.{% endif %}</p>
+<form method="post" class="card" style="max-width:720px"><input type="hidden" name="csrf" value="{{ csrf }}">
+<label for="room_id">Phòng (có thể bỏ trống nếu chỉ mượn thiết bị)</label>
+<select id="room_id" name="room_id"><option value="">— Không đặt phòng —</option>
+{% for r in rooms %}<option value="{{ r.id }}" {{ 'selected' if f.get('room_id')==r.id|string }}>{{ r.name }} · {{ r.location }} · {{ r.capacity }} chỗ</option>{% endfor %}</select>
+<div class="row"><div><label for="date">Ngày</label><input id="date" name="date" type="date" required value="{{ f.get('date','') }}"></div>
+<div><label for="start">Từ</label><input id="start" name="start" type="time" step="1800" required value="{{ f.get('start','') }}"></div>
+<div><label for="end">Đến</label><input id="end" name="end" type="time" step="1800" required value="{{ f.get('end','') }}"></div></div>
+<label>Thiết bị cần mượn (nhập số lượng)</label>
+<div class="row">{% for e in equips %}<div><span style="font-size:.88rem">{{ e.name }} <span class="muted">(tối đa {{ e.avail }})</span></span>
+<input name="eq_{{ e.id }}" type="number" min="0" max="{{ e.avail }}" value="{{ f.get('eq_' ~ e.id, 1 if f.get('eq')==e.id|string else 0) }}"></div>{% endfor %}</div>
+<label for="purpose">Mục đích sử dụng</label><textarea id="purpose" name="purpose">{{ f.get('purpose','') }}</textarea>
+<p><button class="btn">Gửi yêu cầu</button> <a class="btn ghost" href="{{ url_for('schedule') }}">Xem lịch tuần</a></p></form>
+{% endblock %}

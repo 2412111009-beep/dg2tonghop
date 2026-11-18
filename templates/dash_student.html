@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% from "_m.html" import badge, span with context %}{% block title %}Tổng quan sinh viên{% endblock %}
+{% block content %}
+<h1>Xin chào, {{ me.full_name }}</h1><p class="sub">Xem giờ trống rồi gửi yêu cầu. Yêu cầu chưa duyệt có thể bị giảng viên thay thế khi trùng giờ.</p>
+{% if bumped %}<div class="flash warn">Có {{ bumped }} yêu cầu của bạn đã bị thay thế. Xem chi tiết ở <a href="{{ url_for('my_bookings') }}">Yêu cầu của tôi</a>.</div>{% endif %}
+<p><a class="btn" href="{{ url_for('booking_new') }}">Đặt phòng / thiết bị</a> <a class="btn ghost" href="{{ url_for('schedule') }}">Xem lịch tuần</a></p>
+<div class="card"><h2>Lịch sắp tới của bạn</h2>
+{% if mine %}<div class="tw"><table><tr><th>Phòng</th><th>Thời gian</th><th>Trạng thái</th></tr>
+{% for b in mine %}<tr><td>{{ b.room or '—' }}</td><td>{{ span(b.start_time, b.end_time) }}</td><td>{{ badge(b.status) }}</td></tr>{% endfor %}</table></div>
+{% else %}<div class="empty">Bạn chưa có lịch nào sắp tới. Chọn một ô trống trên lịch tuần để đặt.</div>{% endif %}</div>
+{% endblock %}

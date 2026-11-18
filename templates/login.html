@@ -1,0 +1,10 @@
+{% extends "_auth.html" %}{% block title %}Đăng nhập{% endblock %}
+{% block form %}
+<h1>Đăng nhập</h1><p class="sub">Dùng email đã đăng ký.</p>
+<form method="post"><input type="hidden" name="csrf" value="{{ csrf }}">
+<label for="email">Email</label><input id="email" name="email" type="email" required autofocus>
+<label for="password">Mật khẩu</label><input id="password" name="password" type="password" required>
+<p style="margin:1.25rem 0 .75rem"><button class="btn" style="width:100%">Đăng nhập</button></p></form>
+<p><a href="{{ url_for('forgot') }}">Quên mật khẩu?</a> · <a href="{{ url_for('register') }}">Tạo tài khoản</a></p>
+<p class="muted" style="font-size:.82rem;margin-top:1.5rem">Tài khoản mẫu: admin@lab.local / admin123 · gv@lab.local / gv123456 · sv@lab.local / sv123456</p>
+{% endblock %}

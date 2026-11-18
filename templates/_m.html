@@ -1,0 +1,3 @@
+{% macro badge(s) %}<span class="badge {{ s }}">{{ STATUS_LABEL.get(s, s) }}</span>{% endmacro %}
+{% macro span(a,b) %}{{ a[8:10] }}/{{ a[5:7] }}/{{ a[0:4] }} · {{ a[11:16] }}–{{ b[11:16] }}{% endmacro %}
+{% macro who(r, role) %}{{ r }}{% if role == 'lecturer' %} <span class="badge lecturer">GV</span>{% endif %}{% endmacro %}

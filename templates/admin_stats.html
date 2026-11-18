@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Thống kê{% endblock %}
+{% block content %}
+<h1>Thống kê sử dụng</h1><p class="sub">Chỉ tính yêu cầu đã duyệt hoặc hoàn tất.</p>
+<form class="card inline-form" method="get">
+<label style="margin:0">Từ</label><input type="date" name="from" value="{{ d_from }}"><label style="margin:0">Đến</label><input type="date" name="to" value="{{ d_to }}"><button class="btn sm">Xem</button></form>
+<div class="grid g2">
+<div class="card"><h2>Tần suất sử dụng phòng</h2>
+{% for r in rooms %}<div class="bar"><span>{{ r.name }}</span><span class="t"><i style="width:{{ (r.cnt / max_room * 100)|round(1) }}%"></i></span><span>{{ r.cnt }} lượt · {{ r.hours }} giờ</span></div>{% endfor %}</div>
+<div class="card"><h2>Thiết bị được mượn</h2>
+{% for e in equips %}<div class="bar"><span>{{ e.name }}</span><span class="t"><i style="width:{{ (e.cnt / max_eq * 100)|round(1) }}%"></i></span><span>{{ e.cnt }} lượt · {{ e.qty }} cái</span></div>{% endfor %}</div></div>
+<div class="card"><h2>Lượt đặt theo thứ trong tuần</h2>
+<div class="cols">{% for name, c in by_day %}<div><span>{{ c }}</span><i style="height:{{ (c / max_day * 100)|round(1) }}%"></i><span>{{ name }}</span></div>{% endfor %}</div></div>
+{% endblock %}

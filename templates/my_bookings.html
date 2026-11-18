@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% from "_m.html" import badge, span with context %}{% block title %}Yêu cầu của tôi{% endblock %}
+{% block content %}
+<h1>Yêu cầu của tôi</h1><p class="sub">Theo dõi trạng thái và hủy khi không cần nữa.</p>
+{% if rows %}<div class="card tw"><table><tr><th>#</th><th>Phòng</th><th>Thiết bị</th><th>Thời gian</th><th>Trạng thái</th><th></th></tr>
+{% for b in rows %}<tr><td>{{ b.id }}</td><td>{{ b.room or '—' }}</td><td>{{ b.equip or '—' }}</td><td>{{ span(b.start_time, b.end_time) }}</td>
+<td>{{ badge(b.status) }}{% if b.admin_note %}<br><small class="muted">{{ b.admin_note }}</small>{% endif %}</td>
+<td>{% if b.status in ('pending','approved') %}<form method="post" action="{{ url_for('booking_cancel', bid=b.id) }}" onsubmit="return confirm('Hủy yêu cầu này?')"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="btn sm ghost">Hủy</button></form>{% endif %}</td></tr>{% endfor %}</table></div>
+{% else %}<div class="empty">Chưa có yêu cầu nào. <a href="{{ url_for('booking_new') }}">Đặt phòng đầu tiên</a>.</div>{% endif %}
+{% endblock %}

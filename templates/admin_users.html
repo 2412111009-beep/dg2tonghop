@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block title %}Tài khoản{% endblock %}
+{% block content %}
+<h1>Tài khoản</h1><p class="sub">Kích hoạt giảng viên mới đăng ký, đổi vai trò hoặc khóa tài khoản.</p>
+<div class="card tw"><table><tr><th>Họ tên</th><th>Email</th><th>Vai trò</th><th>Trạng thái</th><th></th></tr>
+{% for u in rows %}<tr><td>{{ u.full_name }}{% if u.group_name %}<br><small class="muted">{{ u.group_name }}</small>{% endif %}</td><td>{{ u.email }}</td>
+<td>{% if u.id==me.id %}{{ ROLE_LABEL[u.role] }}{% else %}<form class="inline-form" method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="op" value="role"><input type="hidden" name="id" value="{{ u.id }}">
+<select name="role" aria-label="Vai trò">{% for k,v in ROLE_LABEL.items() %}<option value="{{ k }}" {{ 'selected' if u.role==k }}>{{ v }}</option>{% endfor %}</select><button class="btn sm ghost">Đổi</button></form>{% endif %}</td>
+<td><span class="badge {{ 'approved' if u.is_active else 'pending' }}">{{ 'Hoạt động' if u.is_active else 'Chờ kích hoạt / khóa' }}</span></td>
+<td>{% if u.id!=me.id %}<form method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="op" value="toggle"><input type="hidden" name="id" value="{{ u.id }}"><button class="btn sm {{ 'ghost' if u.is_active else '' }}">{{ 'Khóa' if u.is_active else 'Kích hoạt' }}</button></form>{% endif %}</td></tr>{% endfor %}</table></div>
+{% endblock %}

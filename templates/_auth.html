@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block auth %}
+<div class="auth">
+  <section class="panel" aria-hidden="false">
+    <div class="brand" style="font-size:1.4rem;font-weight:700">LabBook</div>
+    <h1>Lịch phòng lab và thiết bị, không còn trùng giờ.</h1>
+    <p>Xem giờ trống theo tuần, gửi yêu cầu, mượn và trả thiết bị ngay trên một trang.</p>
+    <div class="mini" aria-hidden="true">
+      {% for c in "a a . . p . . a a a . . . l l . . p p . . . a . . . . . l l . . . ." .split() %}<span class="{{ '' if c=='.' else c }}"></span>{% endfor %}
+    </div>
+  </section>
+  <section class="form">
+    {% include '_flash.html' %}
+    {% block form %}{% endblock %}
+  </section>
+</div>
+{% endblock %}
